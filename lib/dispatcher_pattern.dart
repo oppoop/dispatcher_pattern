@@ -2,14 +2,14 @@ import 'package:get_it/get_it.dart';
 
 GetIt getIt = GetIt.instance;
 
-class BlackCatHandler {
+class BlackCat {
   void delivery() {
     print('Black Cat Send');
   }
 }
 
 void main() {
-  getIt.registerSingleton<BlackCatHandler>(BlackCatHandler());
+  getIt.registerSingleton<BlackCat>(BlackCat());
 
-  getIt<BlackCatHandler>().delivery();
+  getIt<BlackCat>().delivery();
 }

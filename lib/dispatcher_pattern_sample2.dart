@@ -14,18 +14,18 @@ class UserCityRequest {
   UserCityRequest(this.city);
 }
 
-abstract class DeliveryHandler {
+abstract class DeliveryController {
   void delivery(UserCityRequest userCity);
 }
 
-class BlackCatHandler implements DeliveryHandler {
+class BlackCatController implements DeliveryController {
   @override
   void delivery(UserCityRequest userCity) {
     print('${userCity.city} is Send by Black Cat');
   }
 }
 
-class ChungHwaHandler implements DeliveryHandler {
+class ChungHwaController implements DeliveryController {
   @override
   void delivery(UserCityRequest userCity) {
     print('${userCity.city} is Send by Chung Hwa');
@@ -33,16 +33,16 @@ class ChungHwaHandler implements DeliveryHandler {
 }
 
 class DeliveryDispatcher {
-  final Map<City, DeliveryHandler> handlers = {};
+  final Map<City, DeliveryController> controllers = {};
 
-  void registerHandler(City city, DeliveryHandler handler) {
-    handlers[city] = handler;
+  void registerController(City city, DeliveryController controller) {
+    controllers[city] = controller;
   }
 
   void dispatch(UserCityRequest city) {
-    final handler = handlers[city.city];
-    if (handler != null) {
-      handler.delivery(city);
+    final controller= controllers[city.city];
+    if (controller != null) {
+      controller.delivery(city);
     } else {
       print('${city.city} can not support');
     }
@@ -51,21 +51,21 @@ class DeliveryDispatcher {
 
 void main() {
   getIt.registerSingleton<DeliveryDispatcher>(DeliveryDispatcher());
-  final handlerA = BlackCatHandler();
-  final handlerB = ChungHwaHandler();
-  final deliveryHandler = getIt<DeliveryDispatcher>();
+  final blackCat = BlackCatController();
+  final chungHwa = ChungHwaController();
+  final deliveryController = getIt<DeliveryDispatcher>();
 
-  deliveryHandler.registerHandler(City.taichung, handlerA);
-  deliveryHandler.registerHandler(City.tainan, handlerA);
-  deliveryHandler.registerHandler(City.taipei, handlerB);
+  deliveryController.registerController(City.taichung, blackCat);
+  deliveryController.registerController(City.tainan, blackCat);
+  deliveryController.registerController(City.taipei, chungHwa);
 
   final sendTaichung = UserCityRequest(City.taichung);
   final sendTaipei = UserCityRequest(City.taipei);
   final sendTainan = UserCityRequest(City.tainan);
 
-  deliveryHandler.dispatch(sendTaichung);
-  deliveryHandler.dispatch(sendTaipei);
-  deliveryHandler.dispatch(sendTainan);
+  deliveryController.dispatch(sendTaichung);
+  deliveryController.dispatch(sendTaipei);
+  deliveryController.dispatch(sendTainan);
 
-  deliveryHandler.dispatch(UserCityRequest(City.hongKong));
+  deliveryController.dispatch(UserCityRequest(City.hongKong));
 }

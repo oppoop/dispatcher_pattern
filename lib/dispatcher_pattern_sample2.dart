@@ -6,6 +6,7 @@ enum City {
   tainan,
   hongKong,
   unKnown,
+  kaohsiung,
 }
 
 class UserCityRequest {
@@ -40,7 +41,7 @@ class DeliveryDispatcher {
   }
 
   void dispatch(UserCityRequest city) {
-    final controller= controllers[city.city];
+    final controller = controllers[city.city];
     if (controller != null) {
       controller.delivery(city);
     } else {
@@ -58,6 +59,7 @@ void main() {
   deliveryController.registerController(City.taichung, blackCat);
   deliveryController.registerController(City.tainan, blackCat);
   deliveryController.registerController(City.taipei, chungHwa);
+  deliveryController.registerController(City.kaohsiung, chungHwa);
 
   final sendTaichung = UserCityRequest(City.taichung);
   final sendTaipei = UserCityRequest(City.taipei);
@@ -66,6 +68,7 @@ void main() {
   deliveryController.dispatch(sendTaichung);
   deliveryController.dispatch(sendTaipei);
   deliveryController.dispatch(sendTainan);
+  deliveryController.dispatch(UserCityRequest(City.kaohsiung));
 
   deliveryController.dispatch(UserCityRequest(City.hongKong));
 }
